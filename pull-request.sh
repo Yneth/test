@@ -1,12 +1,16 @@
 #!/bin/bash
 
-setup_git() {
+build_head=""
+
+setup_git_config() {
     git config --global user.email "travis@travis-ci.org"
     git config --global user.name "Travis CI"
+}
 
+checkout_branch() {
     # Keep track of where Travis put us.
     # We are on a detached head, and we need to be able to go back to it.
-    local build_head=$(git rev-parse HEAD)
+    build_head=$(git rev-parse HEAD)
 
     # Fetch all the remote branches. Travis clones with `--depth`, which
     # implies `--single-branch`, so we need to overwrite remote.origin.fetch to
@@ -17,22 +21,23 @@ setup_git() {
     git fetch --tags
 
     # create the tacking branches
-    for branch in $(git branch -r|grep -v HEAD) ; do
-        git checkout -qf ${branch#origin/}
-    done
+    git checkout -qf $TRAVIS_BRANCH
+}
 
+make_pr() {
+    git checkout -$TAVIS_BRANCH
+    diff=$(git diff HEAD~1 -- test)
+    [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test"
+    
     # finally, go back to where we were at the beginning
     git checkout ${build_head}
 }
 
-
-make_pr() {
-    git checkout .
-    git checkout -$TAVIS_BRANCH
-    git status
-    diff=$(git diff HEAD~1 -- test)
-    [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test"
+checkout_build() {
+    git checkout -qf ${build_head}
 }
 
-setup_git
+setup_git_config
+checkout_branch
 make_pr
+checkout_build
