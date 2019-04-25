@@ -37,7 +37,7 @@ make_pr() {
     git checkout -qf $TRAVIS_BRANCH
 
     echo "do make pull request"
-    hub pull-request -m "test"
+    hub pull-request -m "$PULL_REQUEST_NAME"
 }
 
 checkout_build() {
@@ -45,7 +45,7 @@ checkout_build() {
     git checkout -qf ${build_head}
 }
 
-diff=$(git diff HEAD~1 -- test)
+diff=$(git diff HEAD~1 -- "$FILE_TO_CHECK")
 if [ -z "$diff" ]; then
     echo "test file was not changed" 
 else 
