@@ -52,7 +52,8 @@ make_pr() {
 }
 
 checkout_build() {
-    git checkout ${build_head}
+    echo "checking out build head"
+    git checkout -qf ${build_head}
 }
 
 setup_git_config
