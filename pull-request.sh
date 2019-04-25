@@ -32,7 +32,9 @@ make_pr() {
     git status
     echo "$TRAVIS_BRANCH"
 
-    git checkout -f $TAVIS_BRANCH
+    git checkout -f origin $TAVIS_BRANCH
+    git status
+
     diff=$(git diff HEAD~1 -- test)
     [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test [skip ci]"
 }
