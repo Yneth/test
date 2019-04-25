@@ -27,13 +27,13 @@ make_pr() {
         exit 0
     fi
     
-    git checkout -qf $TAVIS_BRANCH
+    git checkout $TAVIS_BRANCH
     diff=$(git diff HEAD~1 -- test)
     [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test [skip ci]"
 }
 
 checkout_build() {
-    git checkout -qf ${build_head}
+    git checkout ${build_head}
 }
 
 setup_git_config
