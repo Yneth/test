@@ -33,13 +33,22 @@ make_pr() {
         exit 0
     fi
 
+    echo "check if pull request"
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        echo "pull request already exists"
+        exit 0
+    fi
+
     echo "checkout target branch"
     git checkout -f $TAVIS_BRANCH
 
     diff=$(git diff HEAD~1 -- test)
-
-    echo "make pull request"
-    [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test [ci skip]"
+    if [ -z "$diff" ]; then
+        echo "test file was not changed" 
+    else 
+        echo "test file was updated, making pull request" 
+        hub pull-request -m "test [ci skip]"
+    fi
 }
 
 checkout_build() {
