@@ -22,7 +22,7 @@ setup_git_branches() {
 }
 
 make_pr() {
-    if ["$TRAVIS_BRANCH" = "master"]; then
+    if [ "$TRAVIS_BRANCH" = "master" ]; then
         echo "skipping pull request on master"
         exit 0
     fi
