@@ -19,6 +19,11 @@ setup_git_branches() {
     git fetch
     # optionally, we can also fetch the tags
     git fetch --tags
+    
+    # create the tacking branches
+    for branch in $(git branch -r|grep -v HEAD) ; do
+        git checkout -qf ${branch#origin/}
+    done
 }
 
 make_pr() {
