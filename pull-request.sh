@@ -27,12 +27,10 @@ checkout_branch() {
 }
 
 make_pr() {
-    git checkout -$TAVIS_BRANCH
+    git checkout $TAVIS_BRANCH
+    git status
     diff=$(git diff HEAD~1 -- test)
     [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test"
-    
-    # finally, go back to where we were at the beginning
-    git checkout ${build_head}
 }
 
 checkout_build() {
