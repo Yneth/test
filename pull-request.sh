@@ -22,6 +22,11 @@ setup_git_branches() {
 }
 
 make_pr() {
+    if ["$TRAVIS_BRANCH" = "master"]; then
+        echo "skipping pull request on master"
+        exit 0
+    fi
+    
     git checkout -qf $TAVIS_BRANCH
     diff=$(git diff HEAD~1 -- test)
     [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test [skip ci]"
