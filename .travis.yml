@@ -1,0 +1,17 @@
+language: python
+dist: xenial
+cache: npm
+
+python:
+  - "3.6"
+
+addons:
+  apt:
+    packages:
+      - python-pygments
+
+before_install:
+  - sudo snap install --classic hub
+
+script:
+  - ./pull-request.sh
