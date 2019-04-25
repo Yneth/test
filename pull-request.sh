@@ -2,6 +2,8 @@
 
 build_head=""
 
+echo "$TRAVIS_BRANCH"
+
 setup_git_config() {
     git config --global user.email "travis@travis-ci.org"
     git config --global user.name "Travis CI"
