@@ -36,6 +36,7 @@ make_pr() {
     echo "checkout target branch"
     git checkout -qf $TRAVIS_BRANCH
 
+    echo "do make pull request"
     hub pull-request -m "test"
 }
 
