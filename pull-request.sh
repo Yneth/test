@@ -6,7 +6,9 @@ setup_git() {
 }
 
 make_pr() {
+    git checkout .
     git checkout $TAVIS_BRANCH
+    git status
     diff=$(git diff HEAD~1 -- test)
     [ -z "$diff" ] && echo "Test file is empty." || hub pull-request -m "test"
 }
