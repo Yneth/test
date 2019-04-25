@@ -47,7 +47,7 @@ make_pr() {
         echo "test file was not changed" 
     else 
         echo "test file was updated, making pull request" 
-        hub pull-request -m "test [ci skip]"
+        hub pull-request -m "test"
     fi
 }
 
