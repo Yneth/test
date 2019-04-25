@@ -1,12 +1,6 @@
 #!/bin/bash
 
 build_head=""
-
-setup_git_config() {
-    git config --global user.email "travis@travis-ci.org"
-    git config --global user.name "Travis CI"
-}
-
 setup_git_branches() {
     # Keep track of where Travis put us.
     # We are on a detached head, and we need to be able to go back to it.
@@ -19,7 +13,7 @@ setup_git_branches() {
     git fetch
     # optionally, we can also fetch the tags
     git fetch --tags
-    
+
     # create the tacking branches
     for branch in $(git branch -r|grep -v HEAD) ; do
         git checkout -qf ${branch#origin/}
@@ -40,15 +34,10 @@ make_pr() {
     fi
 
     echo "checkout target branch"
-    git checkout -f $TRAVIS_BRANCH
+    git checkout -qf $TRAVIS_BRANCH
 
-    diff=$(git diff HEAD~1 -- test)
-    if [ -z "$diff" ]; then
-        echo "test file was not changed" 
-    else 
-        echo "test file was updated, making pull request" 
-        hub pull-request -m "test"
-    fi
+    echo "do make pull request"
+    hub pull-request -m "test"
 }
 
 checkout_build() {
@@ -56,7 +45,12 @@ checkout_build() {
     git checkout -qf ${build_head}
 }
 
-setup_git_config
-setup_git_branches
-make_pr
-checkout_build
+diff=$(git diff HEAD~1 -- test)
+if [ -z "$diff" ]; then
+    echo "test file was not changed" 
+else 
+    echo "test file was updated, making pull request" 
+    setup_git_branches
+    make_pr
+    checkout_build
+fi
