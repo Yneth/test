@@ -27,20 +27,20 @@ setup_git_branches() {
 }
 
 make_pr() {
-    echo "check if master"
-    if [ "$TRAVIS_BRANCH" == "master" ]; then
-        echo "skipping pull request on master"
+    echo "check if current build is a pull request build"
+    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+        echo "this build is already a pull request one"
         exit 0
     fi
 
-    echo "check if pull request"
-    if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-        echo "pull request already exists"
+    echo "check if current branch is master"
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+        echo "skipping pull request from master to master"
         exit 0
     fi
 
     echo "checkout target branch"
-    git checkout -f $TAVIS_BRANCH
+    git checkout -f $TRAVIS_BRANCH
 
     diff=$(git diff HEAD~1 -- test)
     if [ -z "$diff" ]; then
